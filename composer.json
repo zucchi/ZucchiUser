@@ -1,6 +1,6 @@
 {
     "name": "zucchi/user",
-    "description": "User Entity and management",
+    "description": "Module to provide User Entity with management interface for Zucchi ZF2 Modules",
     "type": "library",
     "keywords": [
         "zucchi",
