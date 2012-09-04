@@ -1,7 +1,7 @@
 <?php
 namespace ZucchiUser\Service;
 
-use Zucchi\Service\AbstractService;
+use ZucchiDoctrine\Service\AbstractService;
 
 class User extends AbstractService
 {

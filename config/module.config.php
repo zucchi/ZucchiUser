@@ -10,6 +10,7 @@ return array(
             'user' => array(
                 'label' => _('User'),
                 'route' => 'ZucchiAdmin/ZucchiUser',
+                'action' => 'list',
             ),
         )
     ),
@@ -18,17 +19,32 @@ return array(
         'routes' => array(
             'ZucchiAdmin' => array(
                 'child_routes' => array(
+                    'ZucchiUserRest' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/user[/:id]',
+                            'defaults' => array(
+                                'controller' => 'zucchi-user-admin',
+                                'action' => null,
+                            ),
+                        ),
+                        'may_terminate' => true,
+                    ),
                     'ZucchiUser' => array(
                         'type'    => 'Segment',
                         'options' => array(
                             'route' => '/user[/:action]',
                             'defaults' => array(
                                 'controller' => 'zucchi-user-admin',
-                                'action' => 'list',
-                            )
+                                'action' => null,
+                            ),
+                            'constraints' => array(
+                                'action'     => '(list|create|update|delete)',
+                            ),
                         ),
                         'may_terminate' => true,
                     ),
+                    
                 ),
             ),
         ),

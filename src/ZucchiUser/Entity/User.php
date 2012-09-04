@@ -4,14 +4,14 @@
  *
  * @link      http://github.com/zucchi/ZucchiUser for the canonical source repository
  * @copyright Copyright (c) 2005-2012 Zucchi Limited. (http://zucchi.co.uk)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @license   http://zucchi.co.uk/legals/bsd-license New BSD License
  */
 namespace ZucchiUser\Entity;
 
-use Zucchi\Entity\AbstractEntity;
+use ZucchiDoctrine\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation AS Form;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use ZucchiDoctrine\Behavior\Timestampable\TimestampableTrait;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -25,13 +25,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @property string $forename
  * @property string $email
  * @property bool $locked
+ * @property DateTime createdAt
+ * @property DateTime updatedAt
  * 
  * @ORM\Entity
  * @ORM\Table(name="zucchi_user")
+ * @Form\Name("user")
+ * @Form\Hydrator("\Zend\Stdlib\Hydrator\ObjectProperty")
  */
 class User extends AbstractEntity
 {
-    use TimestampableEntity;
+    use TimestampableTrait;
     
     /**
      * 
@@ -39,6 +43,8 @@ class User extends AbstractEntity
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Form\Required(false)
+     * @Form\Attributes({"type":"hidden"})
      */
     public $id;
     
@@ -46,10 +52,18 @@ class User extends AbstractEntity
      * 
      * @var string
      * @ORM\Column(type="string", unique=true, nullable=false)
+     * @Form\Required(true)
      * @Form\Filter({"name":"StringTrim"})
-     * @Form\Validator({"name":"StringLength", "options":{"min":1, "max":25}})
      * @Form\Attributes({"type":"text"})
-     * @Form\Options({"label":"Username:"})
+     * @Form\Options({
+     *     "label":"Username", 
+     *     "bootstrap": {
+     *         "help": {
+     *             "style": "inline",
+     *             "content": "The username for the user"
+     *         }
+     *     }
+     * })
      */
     public $identity;
     
@@ -57,6 +71,18 @@ class User extends AbstractEntity
      * 
      * @var string
      * @ORM\Column(type="string", nullable=false)
+     * @Form\Required(true)
+     * @Form\Filter({"name":"StringTrim"})
+     * @Form\Attributes({"type":"password"})
+     * @Form\Options({
+     *     "label":"Password", 
+     *     "bootstrap": {
+     *         "help": {
+     *             "style": "inline",
+     *             "content": "The password for the user to login with"
+     *         }
+     *     }
+     * })
      */
     public $credential;
     
@@ -64,6 +90,18 @@ class User extends AbstractEntity
      * 
      * @var string
      * @ORM\Column(type="string", nullable=false)
+     * @Form\Required(true)
+     * @Form\Filter({"name":"StringTrim"})
+     * @Form\Attributes({"type":"text"})
+     * @Form\Options({
+     *     "label":"Forename", 
+     *     "bootstrap": {
+     *         "help": {
+     *             "style": "inline",
+     *             "content": "The users first name"
+     *         }
+     *     }
+     * })
      */
     public $forename;
     
@@ -71,6 +109,18 @@ class User extends AbstractEntity
      * 
      * @var string
      * @ORM\Column(type="string", nullable=false)
+     * @Form\Required(true)
+     * @Form\Filter({"name":"StringTrim"})
+     * @Form\Attributes({"type":"text"})
+     * @Form\Options({
+     *     "label":"Surname", 
+     *     "bootstrap": {
+     *         "help": {
+     *             "style": "inline",
+     *             "content": "The users last name"
+     *         }
+     *     }
+     * })
      */
     public $surname;
     
@@ -78,6 +128,19 @@ class User extends AbstractEntity
      * 
      * @var string
      * @ORM\Column(type="string", nullable=false)
+     * @Form\Required(true)
+     * @Form\Filter({"name":"StringTrim"})
+     * @Form\Validator({"name": "EmailAddress"})
+     * @Form\Attributes({"type":"email"})
+     * @Form\Options({
+     *     "label":"Email", 
+     *     "bootstrap": {
+     *         "help": {
+     *             "style": "inline",
+     *             "content": "The email address for the user"
+     *         }
+     *     }
+     * })
      */
     public $email;
     
@@ -85,6 +148,26 @@ class User extends AbstractEntity
      * 
      * @var boolean
      * @ORM\Column(type="boolean", nullable=false)
+     * @Form\Type("\Zend\Form\Element\Radio")
+     * @Form\Attributes({"type":"radio"})
+     * @Form\Options({
+     *     "options" : {"0":"No", "1":"Yes"},
+     *     "label":"Locked", 
+     *     "bootstrap": {
+     *         "help": {
+     *             "style": "inline",
+     *             "content": "Has this user account been locked"
+     *         }
+     *     }
+     * })
      */
     public $locked;
+    
+    /**
+     *@ORM\OneToMany(targetEntity="Query",mappedBy="User")
+     *@Form\Exclude
+     */
+    public $Queries;
+    
+    
 }
