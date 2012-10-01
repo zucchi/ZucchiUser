@@ -15,7 +15,8 @@ use ZucchiDoctrine\Behavior\Timestampable\TimestampableTrait;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Entity to store 
+ * audit of events triggered by the user 
+ * 
  * @author Matt Cockayne <matt@zucchi.co.uk>
  * @package ZucchiUser
  * @subpackage Entity
@@ -23,11 +24,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @property string $User
  * @property DateTime createdAt
  * @property DateTime updatedAt
+ * @property string $action
+ * @property array $data
  * 
  * @ORM\Entity
- * @ORM\Table(name="zucchi_user_queries")
+ * @ORM\Table(name="zucchi_user_event")
  */
-class Query extends AbstractEntity
+class Event extends AbstractEntity
 {
     use TimestampableTrait;
     
@@ -48,35 +51,19 @@ class Query extends AbstractEntity
     public $User;
     
     /**
-     * which "entity" the query relates to
+     * The action that is being audited
      * 
      * @var string
      * @ORM\Column(type="string")
      */
-    public $entity;
+    public $action;
     
     /**
-     * visibility of the query to others
+     * data relating to the action
      * 
-     * @var string
-     * @ORM\Column(type="string")
+     * @var array
+     * @ORM\Column(type="json_array")
      */
-    public $visibility;
-    
-    /**
-     * name of the stored query
-     * 
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    public $name;
-    
-    /**
-     * the request query string
-     * 
-     * @var string
-     * @ORM\Column(type="text")
-     */
-    public $query;
+    public $data;
     
 }

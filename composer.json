@@ -22,7 +22,8 @@
         "doctrine/doctrine-module": "dev-master",
         "doctrine/doctrine-orm-module": "dev-master",
         "gedmo/doctrine-extensions": "dev-master",
-        "zucchi/doctrine": "dev-master"
+        "zucchi/doctrine": "dev-master",
+        "zucchi/security": "dev-master"
     },
     "autoload": {
         "psr-0": {

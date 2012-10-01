@@ -24,6 +24,7 @@ return array(
                         'options' => array(
                             'route' => '/user[/:id]',
                             'defaults' => array(
+                                'module' => 'ZucchiUser',
                                 'controller' => 'zucchi-user-admin',
                                 'action' => null,
                             ),
@@ -35,11 +36,12 @@ return array(
                         'options' => array(
                             'route' => '/user[/:action]',
                             'defaults' => array(
+                                'module' => 'ZucchiUser',
                                 'controller' => 'zucchi-user-admin',
                                 'action' => null,
                             ),
                             'constraints' => array(
-                                'action'     => '(list|create|update|delete)',
+                                'action'     => '(list|create|update|delete|export)',
                             ),
                         ),
                         'may_terminate' => true,
@@ -65,6 +67,9 @@ return array(
         ),
     ),
     'service_manager' => array(
+        'invokables' => array(
+            'zucchiuser.listener' => 'ZucchiUser\Event\UserListener',
+        ),
         'factories' => array(
             'zucchiuser.service' => function($sm) {
                 $service = new ZucchiUser\Service\User();
@@ -87,5 +92,43 @@ return array(
                 )
             )
         )
+    ),
+    'ZucchiSecurity' => array(
+        'permissions' => array(
+            'map' => array(
+                'ZucchiUser' => array(
+                    'list' => 'read',
+                    'export' => 'read',
+                ),
+            ),
+            'roles' => array(
+                'user-manager' => array(
+                    'label' => 'User Manager',
+                    'parents'=>array('admin')
+                ),
+            ),
+            'resources' => array(
+                'route' =>array(
+                    'ZucchiAdmin' => array(
+                        'children' => array('ZucchiUser'),
+                    )
+                ),
+                'module' => array(
+                    'ZucchiUser',
+                ),
+            ),
+            'rules' => array(
+                array(
+                    'role' => 'user-manager',
+                    'resource' => array(
+                        'route:ZucchiAdmin/ZucchiUser',
+                        'module:ZucchiUser',
+                    ),
+                    'privileges' => array(
+                        'view', 'create', 'update', 'delete', 'export',
+                    ),
+                ),
+            )
+        ),
     ),
 );

@@ -8,11 +8,22 @@
  */
 namespace ZucchiUser\Entity;
 
+use Zucchi\Filter\Cast;
+
 use ZucchiDoctrine\Entity\AbstractEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Zend\Form\Annotation AS Form;
+use ZucchiDoctrine\Entity\ChangeTrackingTrait;
 use ZucchiDoctrine\Behavior\Timestampable\TimestampableTrait;
+
+use ZucchiSecurity\Entity\AuthenticatableInterface;
+use ZucchiSecurity\Entity\AuthorizableInterface;
+use ZucchiSecurity\Entity\AuthorizableTrait;
+use Zucchi\Debug\Debug;
+
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+
+use Zend\Form\Annotation AS Form;
+use Zend\Crypt\Password\Bcrypt;
 
 /**
  * 
@@ -30,14 +41,20 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * 
  * @ORM\Entity
  * @ORM\Table(name="zucchi_user")
+ * @ORM\HasLifecycleCallbacks
  * @Form\Name("user")
  * @Form\Hydrator("\Zend\Stdlib\Hydrator\ObjectProperty")
  */
-class User extends AbstractEntity
+class User extends AbstractEntity implements
+    AuthenticatableInterface,
+    AuthorizableInterface
 {
+    use ChangeTrackingTrait;
     use TimestampableTrait;
+    use AuthorizableTrait;
     
     /**
+     * users unique id
      * 
      * @var integer
      * @ORM\Id
@@ -45,10 +62,12 @@ class User extends AbstractEntity
      * @ORM\Column(type="integer")
      * @Form\Required(false)
      * @Form\Attributes({"type":"hidden"})
+     * @Form\Filter({"name": "Zucchi\Filter\Cast\Integer"})
      */
     public $id;
     
     /**
+     * users identity
      * 
      * @var string
      * @ORM\Column(type="string", unique=true, nullable=false)
@@ -68,6 +87,7 @@ class User extends AbstractEntity
     public $identity;
     
     /**
+     * users credential
      * 
      * @var string
      * @ORM\Column(type="string", nullable=false)
@@ -87,6 +107,7 @@ class User extends AbstractEntity
     public $credential;
     
     /**
+     * users forename
      * 
      * @var string
      * @ORM\Column(type="string", nullable=false)
@@ -106,6 +127,7 @@ class User extends AbstractEntity
     public $forename;
     
     /**
+     * users surname
      * 
      * @var string
      * @ORM\Column(type="string", nullable=false)
@@ -125,6 +147,7 @@ class User extends AbstractEntity
     public $surname;
     
     /**
+     * users emaiol address
      * 
      * @var string
      * @ORM\Column(type="string", nullable=false)
@@ -145,10 +168,12 @@ class User extends AbstractEntity
     public $email;
     
     /**
+     * is the entity locked from authentication
      * 
      * @var boolean
      * @ORM\Column(type="boolean", nullable=false)
      * @Form\Type("\Zend\Form\Element\Radio")
+     * @Form\Required(false)
      * @Form\Attributes({"type":"radio"})
      * @Form\Options({
      *     "options" : {"0":"No", "1":"Yes"},
@@ -160,14 +185,102 @@ class User extends AbstractEntity
      *         }
      *     }
      * })
+     * @Form\Filter({"name": "Zucchi\Filter\Cast\Boolean"})
      */
     public $locked;
     
     /**
-     *@ORM\OneToMany(targetEntity="Query",mappedBy="User")
-     *@Form\Exclude
+     * security roles assigned to a user
+     * @ORM\Column(type="json_array", nullable=false)
+     * @Form\Type("\Zend\Form\Element\MultiCheckbox")
+     * @Form\Required(false)
+     * @Form\Options({
+     *     "label":"Roles", 
+     *     "bootstrap": {
+     *         "help": {
+     *             "style": "inline",
+     *             "content": "The Roles available to the user"
+     *         }
+     *     }
+     * })
+     */
+    public $roles;
+    
+    /**
+     * Stored Queries for use in the admin
+     * 
+     * @ORM\OneToMany(targetEntity="Query",mappedBy="User")
+     * @Form\Exclude
      */
     public $Queries;
     
+    /**
+     * Event log
+     * 
+     *@ORM\OneToMany(targetEntity="Event",mappedBy="User")
+     *@Form\Exclude
+     */
+    public $Events;
     
+    /**
+     * get a string representation of an entity
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->forename . ' ' . $this->surname;
+    }
+    
+    /**
+     * function to encrypt the credential
+     * 
+     * @param string $credential
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function encryptCredential($credential = null)
+    {
+        $bcrypt = new Bcrypt();
+        
+        if ($credential) {
+            return $bcrypt->create($credential);
+        }
+        
+        // lifecycle event hook
+        if ($this->isChanged('credential')) {
+            $this->credential = $bcrypt->create($credential);
+        }
+    }
+    
+    /**
+     * verify credential match
+     * 
+     * @param string $credential
+     */
+    public function verifyCredential($credential)
+    {
+        $bcrypt = new Bcrypt();
+        return $bcrypt->verify($credential, $this->credential);
+    }
+    
+    /**
+     * function to identify if the authenticated entity is prevented from
+     * authenticating
+     * 
+     * @return boolean
+     */
+    public function isLocked()
+    {
+        return $this->locked;
+    }
+    
+    /**
+     * retrieve the appropriate role/s of the entity
+     * 
+     * @return array
+     */
+    public function getRoles()
+    {
+        return $this->roles;
+    }
 }
