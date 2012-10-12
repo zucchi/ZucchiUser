@@ -30,7 +30,7 @@
             "ZucchiUser": "src/"
         },
         "classmap": [
-            "./"
+            "./Module.php"
         ]
     }
 }
