@@ -69,14 +69,7 @@ return array(
     'service_manager' => array(
         'invokables' => array(
             'zucchiuser.listener' => 'ZucchiUser\Event\UserListener',
-        ),
-        'factories' => array(
-            'zucchiuser.service' => function($sm) {
-                $service = new ZucchiUser\Service\User();
-                $em = $sm->get('doctrine.entitymanager.orm_default');
-                $service->setEntityManager($em);
-                return $service;
-            },
+            'zucchiuser.service' => 'ZucchiUser\Service\User',
         ),
     ),
     'doctrine' => array(

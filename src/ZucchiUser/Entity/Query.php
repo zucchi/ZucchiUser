@@ -44,6 +44,7 @@ class Query extends AbstractEntity
      * 
      * @var Collection
      * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="User_id", referencedColumnName="id", onDelete="CASCADE")
      */
     public $User;
     
