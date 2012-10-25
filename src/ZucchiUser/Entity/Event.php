@@ -34,14 +34,6 @@ class Event extends AbstractEntity
 {
     use TimestampableTrait;
     
-    /** 
-     * @var integer
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    public $id;
-    
     /**
      * Owner of the query
      * 
@@ -49,7 +41,7 @@ class Event extends AbstractEntity
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="User_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    public $User;
+    protected $User;
     
     /**
      * The action that is being audited
@@ -57,7 +49,7 @@ class Event extends AbstractEntity
      * @var string
      * @ORM\Column(type="string")
      */
-    public $action;
+    protected $action;
     
     /**
      * data relating to the action
@@ -65,6 +57,6 @@ class Event extends AbstractEntity
      * @var array
      * @ORM\Column(type="json_array")
      */
-    public $data;
+    protected $data;
     
 }

@@ -54,19 +54,6 @@ class User extends AbstractEntity implements
     use AuthorizableTrait;
     
     /**
-     * users unique id
-     * 
-     * @var integer
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     * @Form\Required(false)
-     * @Form\Attributes({"type":"hidden"})
-     * @Form\Filter({"name": "Zucchi\Filter\Cast\Integer"})
-     */
-    public $id;
-    
-    /**
      * users identity
      * 
      * @var string
@@ -84,7 +71,7 @@ class User extends AbstractEntity implements
      *     }
      * })
      */
-    public $identity;
+    protected $identity;
     
     /**
      * users credential
@@ -104,7 +91,7 @@ class User extends AbstractEntity implements
      *     }
      * })
      */
-    public $credential;
+    protected $credential;
     
     /**
      * users forename
@@ -124,7 +111,7 @@ class User extends AbstractEntity implements
      *     }
      * })
      */
-    public $forename;
+    protected $forename;
     
     /**
      * users surname
@@ -144,7 +131,7 @@ class User extends AbstractEntity implements
      *     }
      * })
      */
-    public $surname;
+    protected $surname;
     
     /**
      * users emaiol address
@@ -165,7 +152,7 @@ class User extends AbstractEntity implements
      *     }
      * })
      */
-    public $email;
+    protected $email;
     
     /**
      * is the entity locked from authentication
@@ -187,7 +174,7 @@ class User extends AbstractEntity implements
      * })
      * @Form\Filter({"name": "Zucchi\Filter\Cast\Boolean"})
      */
-    public $locked;
+    protected $locked;
     
     /**
      * security roles assigned to a user
@@ -204,7 +191,7 @@ class User extends AbstractEntity implements
      *     }
      * })
      */
-    public $roles;
+    protected $roles;
     
     /**
      * Stored Queries for use in the admin
@@ -212,7 +199,7 @@ class User extends AbstractEntity implements
      * @ORM\OneToMany(targetEntity="Query",mappedBy="User")
      * @Form\Exclude
      */
-    public $Queries;
+    protected $Queries;
     
     /**
      * Event log
@@ -220,7 +207,7 @@ class User extends AbstractEntity implements
      *@ORM\OneToMany(targetEntity="Event",mappedBy="User")
      *@Form\Exclude
      */
-    public $Events;
+    protected $Events;
     
     /**
      * get a string representation of an entity

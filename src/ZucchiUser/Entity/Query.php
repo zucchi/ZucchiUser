@@ -31,14 +31,6 @@ class Query extends AbstractEntity
 {
     use TimestampableTrait;
     
-    /** 
-     * @var integer
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    public $id;
-    
     /**
      * Owner of the query
      * 
@@ -46,7 +38,7 @@ class Query extends AbstractEntity
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="User_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    public $User;
+    protected $User;
     
     /**
      * which "entity" the query relates to
@@ -54,7 +46,7 @@ class Query extends AbstractEntity
      * @var string
      * @ORM\Column(type="string")
      */
-    public $entity;
+    protected $entity;
     
     /**
      * visibility of the query to others
@@ -62,7 +54,7 @@ class Query extends AbstractEntity
      * @var string
      * @ORM\Column(type="string")
      */
-    public $visibility;
+    protected $visibility;
     
     /**
      * name of the stored query
@@ -70,7 +62,7 @@ class Query extends AbstractEntity
      * @var string
      * @ORM\Column(type="string")
      */
-    public $name;
+    protected $name;
     
     /**
      * the request query string
@@ -78,6 +70,6 @@ class Query extends AbstractEntity
      * @var string
      * @ORM\Column(type="text")
      */
-    public $query;
+    protected $query;
     
 }
