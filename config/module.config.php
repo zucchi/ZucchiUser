@@ -3,6 +3,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'zucchi-user-admin' => 'ZucchiUser\Controller\AdminController',
+            'zucchi-user-console' => 'ZucchiUser\Controller\ConsoleController',
         ),
     ),
     'navigation' => array(
@@ -47,6 +48,30 @@ return array(
                         'may_terminate' => true,
                     ),
                     
+                ),
+            ),
+        ),
+    ),
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'zucchi-user-create' => array(
+                    'options' => array(
+                        'route' => 'user create [--verbose|-v]',
+                        'defaults' => array(
+                            'controller' => 'zucchi-user-console',
+                            'action' => 'create',
+                        ),
+                    ),
+                ),
+                'zucchi-user-resetpassword' => array(
+                    'options' => array(
+                        'route' => 'user resetpassword [--verbose|-v] <username> <password>',
+                        'defaults' => array(
+                            'controller' => 'zucchi-user-console',
+                            'action' => 'resetpassword',
+                        ),
+                    ),
                 ),
             ),
         ),

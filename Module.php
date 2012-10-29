@@ -15,6 +15,9 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
+use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\EventManager\EventInterface;
 use ZucchiUser\Event\UserListener;
 use Zucchi\Debug\Debug;
@@ -27,7 +30,9 @@ use Zucchi\Debug\Debug;
  */
 class Module implements 
     AutoloaderProviderInterface,
-    ConfigProviderInterface
+    ConfigProviderInterface,
+    ConsoleUsageProviderInterface,
+    ConsoleBannerProviderInterface
 {
     public function onBootstrap(MvcEvent $e)
     {
@@ -62,5 +67,19 @@ class Module implements
     public function getConfig($env = null)
     {
         return include __DIR__ . '/config/module.config.php';
+    }
+
+    public function getConsoleUsage(Console $console)
+    {
+        return include __DIR__ . '/config/console.usage.php';
+    }
+
+    /**
+     * This method is defined in ConsoleBannerProviderInterface
+     */
+    public function getConsoleBanner(Console $console){
+        return
+            "ZucchiUser Version 0.0.1\n"
+            ;
     }
 }

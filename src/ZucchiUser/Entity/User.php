@@ -43,7 +43,7 @@ use Zend\Crypt\Password\Bcrypt;
  * @ORM\Table(name="zucchi_user")
  * @ORM\HasLifecycleCallbacks
  * @Form\Name("user")
- * @Form\Hydrator("\Zend\Stdlib\Hydrator\ObjectProperty")
+ * @Form\Hydrator("zucchidoctrine.entityhydrator")
  */
 class User extends AbstractEntity implements
     AuthenticatableInterface,
