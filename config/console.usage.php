@@ -13,9 +13,11 @@ return array(
     // Describe expected parameters
     array( '--verbose|-v',     '(optional) turn on verbose mode'        ),
 
+    'user create [--verbose|-v]'    => 'Prompted User creation',
+
     'user resetpassword [--verbose|-v] username password'    => 'Reset password for a user',
     // Describe expected parameters
     array( '--verbose|-v',     '(optional) turn on verbose mode'        ),
     array( 'username',     '(required) the username'        ),
-    array( 'massword',     '(required) the password'        ),
+    array( 'password',     '(required) the password'        ),
 );
