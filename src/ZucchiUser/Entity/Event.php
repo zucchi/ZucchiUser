@@ -38,7 +38,7 @@ class Event extends AbstractEntity
      * Owner of the query
      * 
      * @var Collection
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="Events")
      * @ORM\JoinColumn(name="User_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $User;
