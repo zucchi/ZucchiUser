@@ -228,14 +228,14 @@ class User extends AbstractEntity implements
     public function encryptCredential($credential = null)
     {
         $bcrypt = new Bcrypt();
-        
-        if ($credential) {
+
+        if (is_string($credential)) {
             return $bcrypt->create($credential);
         }
         
         // lifecycle event hook
         if ($this->isChanged('credential')) {
-            $this->credential = $bcrypt->create($credential);
+            $this->credential = $bcrypt->create($this->credential);
         }
     }
     
