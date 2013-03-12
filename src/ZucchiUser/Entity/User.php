@@ -21,6 +21,7 @@ use Zucchi\Debug\Debug;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use ZucchiModel\Annotation as Model;
 
 use Zend\Form\Annotation AS Form;
 use Zend\Crypt\Password\Bcrypt;

@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation AS Form;
 use ZucchiDoctrine\Behavior\Timestampable\TimestampableTrait;
 use Gedmo\Mapping\Annotation as Gedmo;
+use ZucchiModel\Annotation as Model;
 
 /**
  * Entity to store 
