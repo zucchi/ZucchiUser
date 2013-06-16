@@ -19,7 +19,7 @@
         "php": ">=5.4.1",
         "zucchi/zucchi": "dev-master",
         "zucchi/admin": "dev-master",
-        "zucchi/model": "dev-master",
+        "zucchi/doctrine": "dev-master",
         "zucchi/security": "dev-master"
     },
     "autoload": {
