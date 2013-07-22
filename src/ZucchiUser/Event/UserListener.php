@@ -56,6 +56,11 @@ class UserListener  implements
                 array($this, 'addUserEvent')
             ),
             $shared->attach(
+                'ZucchiSecurity',
+                SecurityEvent::EVENT_AUTH_FAIL,
+                array($this, 'addUserEvent')
+            ),
+            $shared->attach(
                 'ZucchiUser\Controller\AdminController', 
                 array('crud.create.form', 'crud.update.form'), 
                 array($this, 'populateUserAdminFormValues')
