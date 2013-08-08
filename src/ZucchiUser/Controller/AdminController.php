@@ -17,7 +17,9 @@ use Zucchi\Debug\Debug;
 class AdminController extends AbstractAdminController 
 {
     use CrudControllerTrait;
-    
+
+    protected $resource = 'ZucchiUser';
+
     protected $label = 'User';
     
     protected $service = 'zucchiuser.service';
